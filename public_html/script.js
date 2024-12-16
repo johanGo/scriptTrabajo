@@ -8,8 +8,6 @@ let regex = /\b(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2})\b/;
 for (let i = 0; i < f.length; i++) {
     myArray.push(f[i].innerText);
 
-
-
     if (f[i].innerText.includes("Automatically Resolved because all associated tasks are closed complete or cancelled")) {
         myArray2.push(f[i]);
     }
@@ -22,12 +20,25 @@ for (let i = 0; i < f.length; i++) {
         itemsTimeOpen.push(f[i].innerText.match(regex)[0]);
     }
 }
-
 let match = myArray[myArray.length - 1].match(regex);
 let dateCreationTicket = match[0];
 
-let match2 = myArray2[0].innerText.match(regex);
-let dateCloseTicket = match2[0];
+// cambios para el caso 4
+let match2;
+let dateCloseTicket;
+if(myArray2.length === 0){
+    dateCloseTicket = '02/06/2004 00:00:00';
+    itemsTimeOpen = ['02/06/2004 00:00:00'];
+}else{
+    match2 = myArray2[0].innerText.match(regex);
+    dateCloseTicket = match2[0];
+}
+// match2 = myArray2[0].innerText.match(regex);
+// dateCloseTicket = match2[0];
+//cambios caso 4
+
+// let match2 = myArray2[0].innerText.match(regex);
+// let dateCloseTicket = match2[0];
 
 dateCreationTicket;
 dateCloseTicket;
@@ -42,7 +53,6 @@ while (i < itemsTimeAwaitingUserInfo.length) {
 }
 wholeArray.unshift(dateCloseTicket);
 wholeArray.push(dateCreationTicket);
-console.log(wholeArray);
 
 let wholeArrayDateFormat = wholeArray.map((item) => {
     //Fecha en formato "dd/mm/yyyy hh:mm:ss" 
@@ -50,21 +60,17 @@ let wholeArrayDateFormat = wholeArray.map((item) => {
     // Convertir la cadena de texto a un objeto Date 
     let partes = fechaStr.split(/[\s/:]/);
     let fecha = new Date(partes[2], partes[1] - 1, partes[0], partes[3], partes[4], partes[5]);
-
     let itemsMilisegundos = fecha.getTime();
     return itemsMilisegundos;
-
 });
 
-//cambios
-console.log(wholeArrayDateFormat[0] < wholeArrayDateFormat[1] );
+//cambios para el caso 3
+console.log(wholeArrayDateFormat[0] < wholeArrayDateFormat[1]);
 let timeToday = new Date().getTime();
-console.log(timeToday);
 if(wholeArrayDateFormat[0] < wholeArrayDateFormat[1] ){
     wholeArrayDateFormat.shift();
     wholeArrayDateFormat.unshift(timeToday);
 }
-console.log(wholeArrayDateFormat);
 //cambios
 
 let rest = [];
